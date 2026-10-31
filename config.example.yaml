@@ -1,0 +1,42 @@
+# matrix-wacloud — configuração de exemplo.
+# Valores ${NOME} vêm de variáveis de ambiente (arquivo .env). Não coloque segredos aqui.
+
+homeserver:
+  address: ${MWC_HOMESERVER_URL:-http://synapse:8008}   # como o bridge alcança o Synapse
+  domain: ${MATRIX_DOMAIN}                              # server_name do Synapse (ex.: avisos.seudominio.com)
+
+appservice:
+  id: wacloud
+  bot_localpart: wacloud
+  bot_displayname: Avisos WhatsApp
+  hostname: 0.0.0.0
+  port: 29330
+  address: ${MWC_APPSERVICE_URL:-http://bridge:29330}   # como o Synapse alcança o bridge
+  as_token: ${MWC_AS_TOKEN}
+  hs_token: ${MWC_HS_TOKEN}
+
+whatsapp:
+  phone_number_id: ${WA_PHONE_NUMBER_ID}
+  access_token: ${WA_ACCESS_TOKEN}
+  app_secret: ${WA_APP_SECRET}          # App > Configurações > Básico > Chave secreta do app
+  verify_token: ${WA_VERIFY_TOKEN}      # senha inventada por você; a mesma do painel de webhooks
+  api_version: v26.0
+  webhook_path: /whatsapp/webhook
+  default_template: hello_world         # troque para aviso_unirio quando o template for aprovado
+  default_language: en_US
+  # Ordem dos parâmetros {{1}}, {{2}}... do corpo do template.
+  body_params: [label, text]
+  template_params:
+    hello_world: []
+    aviso_unirio: [label, text]         # "Aviso UNIRIO ({{1}}): {{2}}"
+  max_concurrency: 5
+  max_retries: 3
+
+database: ${MWC_DATA_DIR:-/data}/matrix-wacloud.db
+state_file: ${MWC_DATA_DIR:-/data}/mx-state.json
+
+# Quem pode convidar o bot, rodar comandos e disparar avisos.
+admins:
+  - "@${MATRIX_ADMIN_LOCALPART:-admin}:${MATRIX_DOMAIN}"
+
+log_level: INFO

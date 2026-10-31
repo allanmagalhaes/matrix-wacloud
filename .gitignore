@@ -1,0 +1,19 @@
+# segredos
+.env
+registration.yaml
+config.yaml
+*.db
+*.db-*
+mx-state.json
+data/
+deploy/data/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/

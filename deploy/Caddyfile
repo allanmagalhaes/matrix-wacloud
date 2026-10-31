@@ -1,0 +1,32 @@
+{$DOMAIN} {
+	encode gzip
+
+	# Descoberta do servidor Matrix (clientes como o Element e federação)
+	handle /.well-known/matrix/server {
+		header Content-Type application/json
+		respond `{"m.server": "{$DOMAIN}:443"}`
+	}
+	handle /.well-known/matrix/client {
+		header Content-Type application/json
+		header Access-Control-Allow-Origin *
+		respond `{"m.homeserver": {"base_url": "https://{$DOMAIN}"}}`
+	}
+
+	# Synapse
+	handle /_matrix/* {
+		reverse_proxy synapse:8008
+	}
+	handle /_synapse/client/* {
+		reverse_proxy synapse:8008
+	}
+
+	# Webhook da Meta -> bridge. Só este caminho do bridge fica público;
+	# a API do appservice (/_matrix/app/...) é acessada apenas pelo Synapse na rede interna.
+	handle /whatsapp/* {
+		reverse_proxy bridge:29330
+	}
+
+	handle {
+		respond "matrix-wacloud" 200
+	}
+}

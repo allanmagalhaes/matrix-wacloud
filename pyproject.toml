@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matrix-wacloud"
+version = "0.1.0.dev0"
+description = "Matrix application service that forwards room messages to WhatsApp via the official WhatsApp Business Cloud API (template messages, opt-in subscribers, delivery/read receipts)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Allan dos Santos Magalhães de Sousa" }]
+keywords = ["matrix", "whatsapp", "bridge", "appservice", "notifications", "cloud-api"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Framework :: AsyncIO",
+  "Programming Language :: Python :: 3",
+  "Topic :: Communications :: Chat",
+]
+dependencies = [
+  "mautrix>=0.20,<0.22",
+  "aiohttp>=3.9",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-aiohttp>=1.0"]
+
+[project.scripts]
+matrix-wacloud = "matrix_wacloud.__main__:main"
+
+[project.urls]
+Source = "https://github.com/allanmagalhaes/matrix-wacloud"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = ["ignore:loop argument is deprecated:DeprecationWarning"]
